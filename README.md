@@ -1,7 +1,13 @@
 # Open AI Assistant
 
+FastAPI based AI assistant.
+
 ## Dev
 
-`source env/Scripts/activate`
+Python 3.8+
 
-`uvicorn main:app --reload`
+1. Install virutalenv: `pip install virtualenv`
+2. Create python env: `virtualenv venv`
+3. Activate env: `source venv/Scripts/activate` (Windows)
+4. Install dependencies: `pip install -r requirements.txt`
+5. Run: `uvicorn main:app --reload`
