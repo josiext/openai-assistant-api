@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from openai import OpenAI
 from fastapi import FastAPI
+from pydantic import BaseModel
 import time
 import os
 
@@ -20,14 +21,17 @@ client = OpenAI(
 def read_root():
     return {"status": "ok"}
 
-@app.get("/chat")
-def read_root():
+class Chat(BaseModel):
+    message: str
+
+@app.post("/chat")
+async def chat(data: Chat):
     thread = client.beta.threads.create()
 
     message = client.beta.threads.messages.create(
     thread_id=thread.id,
     role="user",
-    content="Que es tbx?"
+    content=data.message
 )
     run = client.beta.threads.runs.create(
         thread_id=thread.id,
@@ -49,11 +53,10 @@ def read_root():
         time.sleep(2)
 
     messages = client.beta.threads.messages.list(
-    thread_id=thread.id
+        thread_id=thread.id
     )
-
-    print(messages)
 
     for message in reversed(messages.data):
         print(message.content[0].text.value)    
-    return {"Hello":message.content}
+        
+    return {"response": messages.data[0].content[0].text.value  }
