@@ -55,8 +55,5 @@ async def chat(data: Chat):
     messages = client.beta.threads.messages.list(
         thread_id=thread.id
     )
-
-    for message in reversed(messages.data):
-        print(message.content[0].text.value)    
         
     return {"response": messages.data[0].content[0].text.value  }
