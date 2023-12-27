@@ -12,10 +12,7 @@ ORGANIZATION_ID=os.getenv('OPEN_AI_ORGANIZATION_ID')
 ASSISTANT_ID=os.getenv('OPEN_AI_ASSISTANT_ID')
 
 app = FastAPI()
-client = OpenAI(
-    api_key=API_KEY,
-    organization=ORGANIZATION_ID,
-)
+client = OpenAI(api_key=API_KEY, organization=ORGANIZATION_ID)
 
 @app.get("/")
 def read_root():
@@ -28,11 +25,12 @@ class Chat(BaseModel):
 async def chat(data: Chat):
     thread = client.beta.threads.create()
 
-    message = client.beta.threads.messages.create(
-    thread_id=thread.id,
-    role="user",
-    content=data.message
-)
+    client.beta.threads.messages.create(
+        thread_id=thread.id,
+        role="user",
+        content=data.message
+    )
+
     run = client.beta.threads.runs.create(
         thread_id=thread.id,
         assistant_id=ASSISTANT_ID,
